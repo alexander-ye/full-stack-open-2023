@@ -46,7 +46,7 @@ test('a valid blog can be added', async () => {
     .post('/api/blogs')
     .send(newBlog)
     .expect(201)
-    .expect('Content-Type', /application\/json/);
+    .expect('Content-Type', /application\/json/)
   
   const blogsAtEnd = await Blog.find({});
   expect(blogsAtEnd).toHaveLength(blogs.length + 1);
@@ -69,9 +69,12 @@ test('blog without title and url is not added', async () => {
 
 test('blogs have unique identifiers named id', async () => {
   const blogs = await Blog.find({});
-  blogs.forEach(blog => {
-    expect(blog.id).toBeDefined();
+
+  const blogIds = blogs.map(({id}) => {
+    expect(id).toBeDefined();
+    return id
   });
+  expect([...new Set(blogIds)]).toHaveLength(blogs.length);
 });
 
 test('can delete blog', async () => {
