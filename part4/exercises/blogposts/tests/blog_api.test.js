@@ -39,6 +39,7 @@ test('a valid blog can be added', async () => {
   const newBlog = {
     title: "General Kenobi",
     author: "General Grievous",
+    url: "/hello-there",
     likes: 0
   }
 
@@ -54,6 +55,30 @@ test('a valid blog can be added', async () => {
   const blogContents = blogsAtEnd.map(({title, author}) => {
     return {title, author}});
   expect(blogContents).toContainEqual({title: newBlog.title, author: newBlog.author});
+});
+
+test('blog without title is not added', async () => {
+  const newBlog = {
+    author: "Anakin Skywalker",
+    url: "/anakin",
+    likes: 1
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400);
+});
+
+test('blog without url is not added', async () => {
+  const newBlog = {
+    title: "The Chosen One",
+    author: "Anakin Skywalker",
+    likes: 1
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400);
 });
 
 test('blog without title and url is not added', async () => {
@@ -97,6 +122,7 @@ test('new post with missing likes field defaults to 0', async () => {
   const newBlog = {
     title: "Yoda",
     author: "My name is",
+    url: "/dagobah"
   }
 
   const storedBlog = await api
