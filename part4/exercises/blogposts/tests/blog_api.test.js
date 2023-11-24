@@ -91,4 +91,23 @@ test('can delete blog', async () => {
   const blogContents = blogsAtEnd.map(({title, author}) => {
     return {title, author}});
   expect(blogContents).not.toContainEqual({title: blogToDelete.title, author: blogToDelete.author});
+});
+
+test('new post with missing likes field defaults to 0', async () => {
+  const newBlog = {
+    title: "Yoda",
+    author: "My name is",
+  }
+
+  const storedBlog = await api
+    .post('/api/blogs')
+    .send(newBlog)
+
+  expect(storedBlog?._body?._id).toBeDefined();
+  const newBlogId = storedBlog._body._id;
+
+  const returnedBlog = await Blog.find({_id: newBlogId});
+
+  expect(returnedBlog).toHaveLength(1);
+  expect(returnedBlog[0].likes).toBe(0);
 })
