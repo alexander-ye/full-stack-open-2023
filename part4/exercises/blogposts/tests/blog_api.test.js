@@ -67,6 +67,13 @@ test('blog without title and url is not added', async () => {
     .expect(400);
 });
 
+test('blogs have unique identifiers named id', async () => {
+  const blogs = await Blog.find({});
+  blogs.forEach(blog => {
+    expect(blog.id).toBeDefined();
+  });
+});
+
 test('can delete blog', async () => {
   const blogsAtStart = await Blog.find({});
   const blogToDelete = blogsAtStart[0];
