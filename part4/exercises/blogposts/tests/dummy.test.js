@@ -13,7 +13,6 @@ describe('dummy', () => {
 
 
 describe('total likes', () => {
-
   test('when list has only one blog, equals the likes of that', () => {
     const result = listHelper.totalLikes(listWithOneBlog);
     expect(result).toBe(5);
@@ -34,3 +33,20 @@ describe('total likes', () => {
     expect(result).toBe(0);
   });
 });
+
+describe('favorite blog', () => {
+  test('when list has only one blog, return that blog', () => {
+    const result = listHelper.favoriteBlog(listWithOneBlog);
+    expect(result).toEqual(listWithOneBlog[0]);
+  });
+
+  test('when list is empty, return null', () => {
+    const result = listHelper.favoriteBlog([]);
+    expect(result).toBe(null);
+  });
+
+  test('when list has several blogs, return the blog with most likes', () => {
+    const result = listHelper.favoriteBlog(blogs);
+    expect(result).toEqual(blogs[2]);
+  });
+})
