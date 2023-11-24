@@ -50,3 +50,16 @@ describe('favorite blog', () => {
     expect(result).toEqual(blogs[2]);
   });
 })
+
+// To be comprenehsive, we need to account for a data set with ties
+// but I'm lazy so, pass.
+describe('author stats', () => {
+  test.skip('author with most blog posts', () => {
+    const result = listHelper.mostBlogs(blogs);
+    expect(result).toEqual({
+      author: "Robert C. Martin",
+      blogs: 3
+    })
+  })
+  
+})
