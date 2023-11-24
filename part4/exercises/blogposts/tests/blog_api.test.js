@@ -28,6 +28,31 @@ describe('fetching blogs', () => {
   
     expect(response.body).toHaveLength(blogs.length);
   });
+
+  test('can fetch specific blog with valid id', async () => {
+    const blogsAtStart = await Blog.find({});
+    const blogToView = blogsAtStart[0];
+  
+    const response = await api
+      .get(`/api/blogs/${blogToView.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+  
+    const fetchedBlog = response.body;
+
+    expect(fetchedBlog._id).toEqual(blogToView.id);
+    expect(fetchedBlog.title).toEqual(blogToView.title);
+    expect(fetchedBlog.author).toEqual(blogToView.author);
+    expect(fetchedBlog.url).toEqual(blogToView.url);
+    expect(fetchedBlog.likes).toEqual(blogToView.likes);
+  });
+
+  test('fetching a blog with an invalid id throws error', async () =>{
+    const invalidId = 'starwars'
+    response = await api
+      .get(`/api/blogs/${invalidId}`)
+      .expect(400)
+  })
 })
 
 
@@ -108,7 +133,7 @@ describe('creating blog posts', () => {
     expect(returnedBlog).toHaveLength(1);
     expect(returnedBlog[0].likes).toBe(0);
   })
-  
+
   test('blogs have unique identifiers named id', async () => {
     const blogs = await Blog.find({});
   
@@ -118,6 +143,30 @@ describe('creating blog posts', () => {
     });
     expect([...new Set(blogIds)]).toHaveLength(blogs.length);
   });
+})
+
+describe('updating blog posts', () => {
+  test('can update blog likes', async () => {
+    const blogsAtStart = await Blog.find({});
+    const blogToUpdate = blogsAtStart[0];
+  
+    const updatedBlog = {
+      ...blogToUpdate._doc,
+      likes: blogToUpdate.likes + 1
+    }
+  
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlog)
+      .expect(200);
+    
+    const blogsAtEnd = await Blog.find({});
+    expect(blogsAtEnd).toHaveLength(blogs.length);
+  
+    const blogContents = blogsAtEnd.map(({title, author, likes}) => {
+      return {title, author, likes}});
+    expect(blogContents).toContainEqual({title: updatedBlog.title, author: updatedBlog.author, likes: updatedBlog.likes});
+  })
 })
 
 
