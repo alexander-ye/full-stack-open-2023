@@ -2,22 +2,22 @@ import Togglable from './Togglable';
 
 function Blog({ blog, onLike, onDelete }) {
   return (
-    <div style={blogStyle}>
-      <div>
+    <div style={blogStyle} className="blog">
+      <div className="blogTitleAuthor">
         {blog.title}
         {' '}
         {blog.author}
       </div>
       <Togglable buttonLabel="show details" cancelLabel="hide details">
-        <div>{blog.url}</div>
-        <div>
+        <div className="blogUrl">{blog.url}</div>
+        <div className="blogLikes">
           likes
           {' '}
           {blog.likes}
           <button onClick={() => onLike({ ...blog, likes: blog.likes + 1 })}>like</button>
         </div>
-        <div>{blog.user.name}</div>
-        <button onClick={() => onDelete(blog)}>delete</button>
+        <div className="blogUserName">{blog.user.name}</div>
+        <button className="blogDeleteButton" onClick={() => onDelete(blog)}>delete</button>
       </Togglable>
     </div>
   );
