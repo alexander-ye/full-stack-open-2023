@@ -36,6 +36,7 @@ function LoginForm({ setUser, setNotification }) {
       <div>
         username
         <input
+          id="login-username"
           type="text"
           value={username}
           name="Username"
@@ -45,13 +46,14 @@ function LoginForm({ setUser, setNotification }) {
       <div>
         password
         <input
+          id="login-password"
           type="password"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button id="login-submit-button" type="submit">login</button>
     </form>
   )
 }
