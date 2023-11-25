@@ -6,6 +6,7 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -19,6 +20,7 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
+      setNotification('User successfully logged in')
     }
 
     // return () => window.localStorage.removeItem('loggedNoteappUser')
@@ -27,9 +29,9 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      
+      {notification !== null && <Notification notification={notification} setNotification={setNotification} />}
       {user === null 
-        ? <LoginForm user={user} setUser={setUser} />
+        ? <LoginForm user={user} setUser={setUser} setNotification={setNotification} />
         : <>
           <p>{user.name} logged in</p>
           <button onClick={() => {
@@ -39,7 +41,7 @@ const App = () => {
           {blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
       )}
-      <BlogForm blogs={blogs} setBlogs={setBlogs} />
+      <BlogForm blogs={blogs} setBlogs={setBlogs} setNotification={setNotification} />
         </>}
     </div>
   )
@@ -47,7 +49,7 @@ const App = () => {
 
 export default App
 
-const LoginForm = ({setUser}) => {
+const LoginForm = ({setUser, setNotification}) => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   
@@ -71,8 +73,10 @@ const LoginForm = ({setUser}) => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setNotification('User successfully logged in')
 
     } catch (exception) {
+      setNotification('Wrong credentials')
       console.error(exception);
     }
   }
@@ -99,7 +103,7 @@ const LoginForm = ({setUser}) => {
 </form>
 }
 
-const BlogForm = ({blogs, setBlogs}) => {
+const BlogForm = ({blogs, setBlogs, setNotification}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl ] = useState('')
@@ -108,6 +112,13 @@ const BlogForm = ({blogs, setBlogs}) => {
     event.preventDefault()
     blogService.create({title, author, url}).then(newBlog => {
       setBlogs(blogs.concat(newBlog))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setNotification('Blog successfully created')
+    }).catch((error) => {
+      setNotification('Error creating blog')
+      console.error(error);
     })
   }
 
@@ -126,4 +137,15 @@ const BlogForm = ({blogs, setBlogs}) => {
     </div>    
     <button type="submit">Create</button>
     </form>
+}
+
+const Notification = ({notification, setNotification}) => {
+
+  useEffect(() => {
+    setTimeout(() => {
+      setNotification(null)
+    } , 5000)
+  }, [])
+
+  return <p>{notification}</p>
 }
