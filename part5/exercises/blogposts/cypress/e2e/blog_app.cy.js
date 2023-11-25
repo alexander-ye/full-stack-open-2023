@@ -86,9 +86,10 @@ describe('Blog app', function() {
     describe('and multiple blogs exists', function() {
       beforeEach(function() {
         const dummyBlogs = [
-          { title: 'test title', author: 'test author', url: 'test url', likes: 0 },
-          { title: 'test title 2', author: 'test author 2', url: 'test url 2', likes: 0 },
-          { title: 'test title 3', author: 'test author 3', url: 'test url 3', likes: 0 }
+          { title: 'test title', author: 'test author', url: 'test url', likes: 1 },
+          { title: 'test title 2', author: 'test author 2', url: 'test url 2', likes: 6 },
+          { title: 'test title 3', author: 'test author 3', url: 'test url 3', likes: 5 },
+          { title: 'test title 4', author: 'test author 4', url: 'test url 4', likes: 3 },
         ]
 
         for (const blog of dummyBlogs) {
@@ -109,7 +110,7 @@ describe('Blog app', function() {
         cy.get('@blog').contains('delete').click().should('not.exist')
       })
 
-      describe('and a different uesr logs in', function() {
+      describe('and a different user logs in', function() {
         beforeEach(function () {
           cy.contains('log out').click()
           cy.request('POST', `${Cypress.env('BACKEND')}/login`, {
@@ -127,16 +128,41 @@ describe('Blog app', function() {
           cy.get('@blog').contains('likes 1')
         })
 
-        // it.only('Different user cannot delete a blog', function() {
+        // it('Different user cannot delete a blog', function() {
         //   cy.contains('test title test author').parent().as('blog')
         //   cy.get('@blog').contains('show details').click()
         //   cy.get('@blog').contains('delete').should('exist')
         // })
 
-        it.only('Different user cannot see delete button', function() {
+        it('Different user cannot see delete button', function() {
           cy.contains('test title test author').parent().as('blog')
           cy.get('@blog').contains('show details').click()
           cy.get('@blog').contains('delete').should('not.exist')
+        })
+      })
+
+      describe('blogs are sorted from most liked to least liked', function() {
+        it('blogs are sorted correctly', function() {
+          cy.get('.blog').then(blogs => {
+            cy.wrap(blogs[0]).contains('test title 2 author 2')
+            cy.wrap(blogs[1]).contains('test title 3 author 3')
+            cy.wrap(blogs[2]).contains('test title 4 author 4')
+            cy.wrap(blogs[3]).contains('test title author')
+          })
+        })
+
+        it('blogs ares sorted correctly after liking a blog', function() {
+          cy.contains('test title test author').parent().as('blog')
+          cy.get('@blog').contains('show details').click()
+          for (let i = 0; i < 6; i++) {
+            cy.get('@blog').contains('like').click()
+          }
+          cy.get('.blog').then(blogs => {
+            cy.wrap(blogs[0]).contains('test title test author')
+            cy.wrap(blogs[1]).contains('test title 2 test author 2')
+            cy.wrap(blogs[2]).contains('test title 3 test author 3')
+            cy.wrap(blogs[3]).contains('test title 4 test author 4')
+          })
         })
       })
     })
