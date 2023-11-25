@@ -20,7 +20,7 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongoose": "^7.6.5",
-    "mongoose-unique-validator": "^4.0.0",
+    "mongoose-unique-validator": "^4.0.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",
