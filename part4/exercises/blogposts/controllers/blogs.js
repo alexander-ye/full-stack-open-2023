@@ -1,5 +1,7 @@
+const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
+const User = require('../models/user');
 const logger = require('../utils/logger');
 
 const getTokenFrom = request => {
@@ -46,11 +48,7 @@ blogsRouter.post('/', async (request, response) => {
       author: body.author,
       url: body.url,
       likes: body.likes || 0,
-      user: {
-        username: user.username,
-        name: user.name,
-        id: user.id
-      }
+      user: user.id
     });
 
     const newBlogPost = await blog.save();
