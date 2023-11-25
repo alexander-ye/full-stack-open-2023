@@ -1,6 +1,15 @@
 
 describe('Blog app', function() {
   beforeEach(function() {
+    // Empty the database each time tests are run
+    cy.request('POST', 'http://localhost:3001/api/testing/reset')
+    // Create a new user each time tests are run
+    const user = {
+      name: 'Superuser',
+      username: 'root',
+      password: 'sekret'
+    }
+    cy.request('POST', 'http://localhost:3001/api/users/', user)
     cy.visit('http://localhost:5173')
   })
 
