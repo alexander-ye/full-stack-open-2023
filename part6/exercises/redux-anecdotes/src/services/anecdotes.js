@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
-const baseUrl = 'http://localhost:3002/anecdotes';
+const baseUrl = 'http://localhost:3001/anecdotes';
 
-const getId = () => (100000 * Math.random()).toFixed(0)
+const getId = () => uuidv4();
 const asObject = (anecdote) => {
   return {
     content: anecdote,
