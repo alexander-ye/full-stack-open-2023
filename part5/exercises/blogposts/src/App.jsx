@@ -31,7 +31,17 @@ const App = () => {
         setBlogs(blogs.map(b => b._id === blog._id ? {...b, likes: blog.likes} : b).sort((blogA, blogB) => blogB.likes - blogA.likes))
       }
     })
-  
+  }
+
+  const deleteBlog = (blogObject) => {
+    if (confirm(`Delete blog ${blogObject.title} by ${blogObject.author}?`)) {
+      blogService.deleteBlog(blogObject._id).then(() => {
+        setBlogs(blogs.filter(blog => blog._id !== blogObject._id))
+      }).catch(error => {
+        console.error(error);
+        setNotification('Blog could not be deleted')
+      })
+    }
   }
 
   useEffect(() => {
@@ -63,7 +73,7 @@ const App = () => {
         </Togglable>
         </>}
         {blogs.map(blog =>
-          <Blog key={blog._id} blog={blog} onLike={likeBlog} />
+          <Blog key={blog._id} blog={blog} onLike={likeBlog} onDelete={deleteBlog} />
       )}
     </div>
   )
