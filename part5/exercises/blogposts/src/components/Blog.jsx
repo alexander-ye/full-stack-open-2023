@@ -1,4 +1,4 @@
-import Togglable from './Togglable';
+import Togglable from './Togglable'
 
 function Blog({ blog, onLike, onDelete }) {
   return (
@@ -20,10 +20,10 @@ function Blog({ blog, onLike, onDelete }) {
         <button className="blogDeleteButton" onClick={() => onDelete(blog)}>delete</button>
       </Togglable>
     </div>
-  );
+  )
 }
 
-export default Blog;
+export default Blog
 
 const blogStyle = {
   paddingTop: 10,
@@ -31,4 +31,4 @@ const blogStyle = {
   border: 'solid',
   borderWidth: 1,
   marginBottom: 5,
-};
+}
