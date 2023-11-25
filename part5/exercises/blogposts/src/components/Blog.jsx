@@ -1,7 +1,6 @@
 import Togglable from "./Togglable"
 
 const Blog = ({ blog }) => {
-  console.log(blog);
   return (
     <div style={blogStyle}>
       <div>

@@ -13,6 +13,11 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
+const get = (id) => {
+  const request = axios.get(`${endpoint}/${id}`)
+  return request.then(response => response.data)
+}
+
 const create = async newBlog => {
   const config = {
     headers: { Authorization: token },
@@ -21,4 +26,4 @@ const create = async newBlog => {
   return response.data
 }
 
-export default { getAll, create, setToken }
+export default { get, getAll, create, setToken }

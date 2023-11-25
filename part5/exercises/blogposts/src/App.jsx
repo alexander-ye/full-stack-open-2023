@@ -17,7 +17,11 @@ const App = () => {
   }, [])
 
   const createBlog = (blogObject) => {
-    setBlogs(blogs.concat(blogObject))
+    blogService.get(blogObject._id).then(blog => {
+      if (blog) {
+        setBlogs(blogs.concat(blog))
+      }
+    })
     setNotification('Blog successfully created')
   }
 
@@ -50,7 +54,7 @@ const App = () => {
         </Togglable>
         </>}
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog._id} blog={blog} />
       )}
     </div>
   )
