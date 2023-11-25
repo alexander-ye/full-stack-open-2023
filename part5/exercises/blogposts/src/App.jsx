@@ -13,6 +13,17 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+
+    return () => window.localStorage.removeItem('loggedNoteappUser')
+  }, [])
+
   return (
     <div>
       <h2>blogs</h2>
@@ -21,6 +32,10 @@ const App = () => {
         ? <LoginForm user={user} setUser={setUser} />
         : <>
           <p>{user.name} logged in</p>
+          <button onClick={() => {
+            window.localStorage.removeItem('loggedNoteappUser')
+            setUser(null);
+          }}>log out</button>
           {blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
       )}
@@ -31,7 +46,7 @@ const App = () => {
 
 export default App
 
-const LoginForm = ({user, setUser}) => {
+const LoginForm = ({setUser}) => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   
@@ -53,6 +68,7 @@ const LoginForm = ({user, setUser}) => {
       setUser(user)
       setUsername('')
       setPassword('')
+
     } catch (exception) {
       console.error(exception);
     }
