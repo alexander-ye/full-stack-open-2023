@@ -103,6 +103,12 @@ describe('Blog app', function() {
         cy.get('@blog').contains('likes 1')
       })
 
+      it('User can delete a blog', function() {
+        cy.contains('test title test author').parent().as('blog')
+        cy.get('@blog').contains('show details').click()
+        cy.get('@blog').contains('delete').click().should('not.exist')
+      })
+
       describe('and a different uesr logs in', function() {
         beforeEach(function () {
           cy.contains('log out').click()
@@ -114,11 +120,17 @@ describe('Blog app', function() {
           })
         })
 
-        it.only('Different user can like a blog', function() {
+        it('Different user can like a blog', function() {
           cy.contains('test title test author').parent().as('blog')
           cy.get('@blog').contains('show details').click()
           cy.get('@blog').contains('like').click()
           cy.get('@blog').contains('likes 1')
+        })
+
+        it.only('Different user cannot delete a blog', function() {
+          cy.contains('test title test author').parent().as('blog')
+          cy.get('@blog').contains('show details').click()
+          cy.get('@blog').contains('delete').should('exist')
         })
       })
     })
