@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const helper = require('./helpers')
+const mongoose = require('mongoose')
 
 const supertest = require('supertest');
 const app = require('../app');
@@ -60,4 +61,83 @@ describe('when there is initially one user in db', () => {
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toEqual(usersAtStart)
   })
+})
+
+describe('user creation field validation', () => {
+  test('no username given', async () => {
+    const newUser = {
+      name: 'Banoobie',
+      password: 'oobiedoobie'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('username or password missing')
+  })
+
+  test('no password given', async () => {
+    const newUser = {
+      username: 'obiwan',
+      name: 'Banoobie'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('username or password missing')
+  })
+
+  test('username does not meet length requirement', async () => {
+    const newUser = {
+      username: 'oo',
+      password: 'biedoobie',
+      name: 'Banoobie'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('must be at least 3 characters long')
+  })
+
+  test('password does not meet length requierment',  async () => {
+    const newUser = {
+      username: 'oobiedoob',
+      password: 'ie',
+      name: 'Banoobie'
+    } 
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('must be at least 3 characters long')
+  })
+
+  test('malformed user input',  async () => {
+    const newUser = {
+      username: 1,
+      password: 2,
+      name: 3
+    } 
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('invalid')
+  })
+})
+
+afterAll(() => {
+  mongoose.connection.close()
 })
