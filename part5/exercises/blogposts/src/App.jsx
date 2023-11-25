@@ -79,7 +79,12 @@ function App() {
             </Togglable>
           </>
         )}
-      {blogs.map((blog) => <Blog key={blog._id} blog={blog} onLike={likeBlog} onDelete={deleteBlog} />)}
+      {blogs.map((blog) => <Blog
+        key={blog._id}
+        blog={blog}
+        onLike={likeBlog}
+        showDelete={user && user.username === blog.user.username}
+        onDelete={deleteBlog} />)}
     </div>
   );
 }

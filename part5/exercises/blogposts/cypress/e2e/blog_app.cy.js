@@ -22,7 +22,13 @@ describe('Blog app', function() {
       username: 'root',
       password: 'sekret'
     }
+    const user2 = {
+      name: 'Oobie Doobie Banoobie',
+      username: 'gkenobi',
+      password: 'master'
+    }
     cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user)
+    cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user2)
     cy.visit('')
   })
 
@@ -68,13 +74,53 @@ describe('Blog app', function() {
       })
     })
 
-    it.only('A blog can be created', function() {
+    it('A blog can be created', function() {
       cy.contains('Create new blog').click()
       cy.get('#title').type('test title')
       cy.get('#author').type('test author')
       cy.get('#url').type('test url')
       cy.get('.createNewBlogButton').click()
       cy.contains('test title')
+    })
+
+    describe('and multiple blogs exists', function() {
+      beforeEach(function() {
+        const dummyBlogs = [
+          { title: 'test title', author: 'test author', url: 'test url', likes: 0 },
+          { title: 'test title 2', author: 'test author 2', url: 'test url 2', likes: 0 },
+          { title: 'test title 3', author: 'test author 3', url: 'test url 3', likes: 0 }
+        ]
+
+        for (const blog of dummyBlogs) {
+          cy.createBlog(blog)
+        }
+      })
+
+      it('User can like a blog', function() {
+        cy.contains('test title test author').parent().as('blog')
+        cy.get('@blog').contains('show details').click()
+        cy.get('@blog').contains('like').click()
+        cy.get('@blog').contains('likes 1')
+      })
+
+      describe('and a different uesr logs in', function() {
+        beforeEach(function () {
+          cy.contains('log out').click()
+          cy.request('POST', `${Cypress.env('BACKEND')}/login`, {
+            username: 'gkenobi', password: 'master'
+          }).then(response => {
+            localStorage.setItem('loggedNoteappUser', JSON.stringify(response.body))
+            cy.visit('')
+          })
+        })
+
+        it.only('Different user can like a blog', function() {
+          cy.contains('test title test author').parent().as('blog')
+          cy.get('@blog').contains('show details').click()
+          cy.get('@blog').contains('like').click()
+          cy.get('@blog').contains('likes 1')
+        })
+      })
     })
   })
 })
