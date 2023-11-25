@@ -14,7 +14,7 @@ function Blog({ blog, onLike, onDelete }) {
           likes
           {' '}
           {blog.likes}
-          <button onClick={() => onLike({ ...blog, likes: blog.likes + 1 })}>like</button>
+          <button className="likeButton" onClick={() => onLike({ ...blog, likes: blog.likes + 1 })}>like</button>
         </div>
         <div className="blogUserName">{blog.user.name}</div>
         <button className="blogDeleteButton" onClick={() => onDelete(blog)}>delete</button>
