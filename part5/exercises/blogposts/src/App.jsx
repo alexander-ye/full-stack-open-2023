@@ -25,6 +25,15 @@ const App = () => {
     setNotification('Blog successfully created')
   }
 
+  const likeBlog = (blogObject) => {
+    blogService.update(blogObject._id, blogObject).then(blog => {
+      if (blog) {
+        setBlogs(blogs.map(b => b._id === blog._id ? {...b, likes: blog.likes} : b))
+      }
+    })
+  
+  }
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
     if (loggedUserJSON) {
@@ -54,7 +63,7 @@ const App = () => {
         </Togglable>
         </>}
         {blogs.map(blog =>
-          <Blog key={blog._id} blog={blog} />
+          <Blog key={blog._id} blog={blog} onLike={likeBlog} />
       )}
     </div>
   )

@@ -1,6 +1,6 @@
 import Togglable from "./Togglable"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, onLike }) => {
   return (
     <div style={blogStyle}>
       <div>
@@ -10,7 +10,7 @@ const Blog = ({ blog }) => {
         <div>{blog.url}</div>
         <div>
           likes {blog.likes}
-          <button>like</button>
+          <button onClick={() => onLike({...blog, likes: blog.likes + 1})}>like</button>
         </div>
         <div>{blog.user.name}</div>
       </Togglable>
