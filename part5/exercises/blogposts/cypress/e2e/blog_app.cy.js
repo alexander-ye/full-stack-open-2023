@@ -144,10 +144,10 @@ describe('Blog app', function() {
       describe('blogs are sorted from most liked to least liked', function() {
         it('blogs are sorted correctly', function() {
           cy.get('.blog').then(blogs => {
-            cy.wrap(blogs[0]).contains('test title 2 author 2')
-            cy.wrap(blogs[1]).contains('test title 3 author 3')
-            cy.wrap(blogs[2]).contains('test title 4 author 4')
-            cy.wrap(blogs[3]).contains('test title author')
+            cy.wrap(blogs[0]).contains('test title 2 test author 2')
+            cy.wrap(blogs[1]).contains('test title 3 test author 3')
+            cy.wrap(blogs[2]).contains('test title 4 test author 4')
+            cy.wrap(blogs[3]).contains('test title test author')
           })
         })
 
