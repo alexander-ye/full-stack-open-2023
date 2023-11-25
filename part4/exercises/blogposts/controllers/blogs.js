@@ -37,7 +37,7 @@ blogsRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async
       user: user.id
     });
 
-    const newBlogPost = await blog.save();
+    const newBlogPost = await blog.save()
     response.status(201).json(newBlogPost);
   } catch (error) {
     logger.error(error);
