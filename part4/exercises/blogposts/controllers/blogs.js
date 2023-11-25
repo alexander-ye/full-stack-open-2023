@@ -1,6 +1,7 @@
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
 const logger = require('../utils/logger');
+const middleware = require('../utils/middleware');
 
 blogsRouter.get('/', async (request, response, next) => {
   try {
@@ -22,10 +23,8 @@ blogsRouter.get('/:id', async (request, response) => {
   }
 });
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async (request, response) => {
   try {
-    console.log(request.token);
-    console.log(request.user);
     const { body } = request;
 
     const user = request.user;
@@ -46,7 +45,7 @@ blogsRouter.post('/', async (request, response) => {
   }
 });
 
-blogsRouter.delete('/:id', async (request, response, next) => {
+blogsRouter.delete('/:id', middleware.tokenExtractor, middleware.userExtractor, async (request, response, next) => {
   try {
     const user = request.user;
 

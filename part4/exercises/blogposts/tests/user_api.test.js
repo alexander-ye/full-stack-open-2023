@@ -47,7 +47,7 @@ describe('when there is initially one user in db', () => {
     const newUser = {
       username: 'root',
       name: 'Master Skywalker',
-      password: 'anakin',
+      password: 'sekret',
     }
 
     const result = await api
