@@ -1,5 +1,7 @@
 import axios from 'axios'
-const baseUrl = '/api/blogs'
+const baseUrl = 'http://localhost:3001'
+const baseSlug = '/api/blogs'
+const endpoint = `${baseUrl}${baseSlug}`
 
 let token =  null
 const setToken = newToken => {
@@ -7,8 +9,16 @@ const setToken = newToken => {
 }
 
 const getAll = () => {
-  const request = axios.get(baseUrl)
+  const request = axios.get(endpoint)
   return request.then(response => response.data)
 }
 
-export default { getAll, setToken }
+const create = async newBlog => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  const response = await axios.post(endpoint, newBlog, config)
+  return response.data
+}
+
+export default { getAll, create, setToken }

@@ -21,7 +21,7 @@ const App = () => {
       blogService.setToken(user.token)
     }
 
-    return () => window.localStorage.removeItem('loggedNoteappUser')
+    // return () => window.localStorage.removeItem('loggedNoteappUser')
   }, [])
 
   return (
@@ -39,6 +39,7 @@ const App = () => {
           {blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
       )}
+      <BlogForm blogs={blogs} setBlogs={setBlogs} />
         </>}
     </div>
   )
@@ -64,6 +65,8 @@ const LoginForm = ({setUser}) => {
         'loggedNoteappUser', JSON.stringify(user)
       ) 
       // On successful login
+      // Set token for blogService
+      blogService.setToken(user.token)
       // Empty form fields, save server response (token + user details) to application state
       setUser(user)
       setUsername('')
@@ -94,4 +97,33 @@ const LoginForm = ({setUser}) => {
   </div>
   <button type="submit">login</button>
 </form>
+}
+
+const BlogForm = ({blogs, setBlogs}) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl ] = useState('')
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    blogService.create({title, author, url}).then(newBlog => {
+      setBlogs(blogs.concat(newBlog))
+    })
+  }
+
+  return <form onSubmit={handleSubmit}>
+    <div>
+      <label htmlFor="title">Title</label>
+      <input id="title" type="text" value={title} onChange={({target}) => setTitle(target.value)} />
+    </div>
+    <div>
+      <label htmlFor="author">Author</label>
+      <input id="author" type="text" value={author} onChange={({target}) => setAuthor(target.value)} />
+    </div>
+    <div>   
+      <label htmlFor="url">URL</label>
+      <input id="url" type="text" value={url} onChange={({target}) => setUrl(target.value)} />
+    </div>    
+    <button type="submit">Create</button>
+    </form>
 }
