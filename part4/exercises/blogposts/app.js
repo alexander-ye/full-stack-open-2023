@@ -4,6 +4,7 @@ const config = require('./utils/config');
 const cors = require('cors');
 const usersRouter = require('./controllers/users');
 const blogsRouter = require('./controllers/blogs');
+const loginRouter = require('./controllers/login')
 const logger = require('./utils/logger');
 const mongoose = require('mongoose');
 
@@ -18,5 +19,6 @@ app.use(express.static('dist'));
 app.use(express.json());
 app.use('/api/users', usersRouter);
 app.use('/api/blogs', blogsRouter);
+app.use('/api/login', loginRouter);
 
 module.exports = app;
