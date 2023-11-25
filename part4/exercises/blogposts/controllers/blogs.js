@@ -66,8 +66,10 @@ blogsRouter.delete('/:id', middleware.tokenExtractor, middleware.userExtractor, 
 blogsRouter.put('/:id', async (request, response, next) => {
   try {
     const {body} = request;
+    console.log(body.user);
 
     const blog = {
+      user: body.user.id,
       title: body.title,
       author: body.author,
       url: body.url,
