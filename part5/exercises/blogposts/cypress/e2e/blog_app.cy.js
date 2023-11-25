@@ -101,7 +101,7 @@ describe('Blog app', function() {
         cy.contains('test title test author').parent().as('blog')
         cy.get('@blog').contains('show details').click()
         cy.get('@blog').contains('like').click()
-        cy.get('@blog').contains('likes 1')
+        cy.get('@blog').contains('likes 2')
       })
 
       it('User can delete a blog', function() {
@@ -125,7 +125,7 @@ describe('Blog app', function() {
           cy.contains('test title test author').parent().as('blog')
           cy.get('@blog').contains('show details').click()
           cy.get('@blog').contains('like').click()
-          cy.get('@blog').contains('likes 1')
+          cy.get('@blog').contains('likes 2')
         })
 
         // it('Different user cannot delete a blog', function() {
