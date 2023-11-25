@@ -4,7 +4,7 @@ const logger = require('../utils/logger');
 
 blogsRouter.get('/', async (request, response) => {
   try {
-    const blogs = await Blog.find({});
+    const blogs = await Blog.find({}).populate('user', {username: 1, name: 1});
     return response.json(blogs);
   } catch (exception) {
     next(exception);
