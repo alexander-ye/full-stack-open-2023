@@ -1,33 +1,33 @@
-import React, { useState } from "react";
-import loginService from "../services/login";
-import blogService from "../services/blogs";
+import React, { useState } from 'react';
+import loginService from '../services/login';
+import blogService from '../services/blogs';
 
-const LoginForm = ({ setUser, setNotification }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+function LoginForm({ setUser, setNotification }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = async (event) => {
     // Backend expects token verifying user's identity to be sent in the Authorization header of note
     event.preventDefault();
     try {
-      console.log("logging in with", username, password);
+      console.log('logging in with', username, password);
       const user = await loginService.login({
         username,
         password,
       });
 
       // Save the user to local storage
-      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
+      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user));
       // On successful login
       // Set token for blogService
       blogService.setToken(user.token);
       // Empty form fields, save server response (token + user details) to application state
       setUser(user);
-      setUsername("");
-      setPassword("");
-      setNotification("User successfully logged in");
+      setUsername('');
+      setPassword('');
+      setNotification('User successfully logged in');
     } catch (exception) {
-      setNotification("Wrong credentials");
+      setNotification('Wrong credentials');
       console.error(exception);
     }
   };
@@ -54,6 +54,6 @@ const LoginForm = ({ setUser, setNotification }) => {
       <button type="submit">login</button>
     </form>
   );
-};
+}
 
 export default LoginForm;

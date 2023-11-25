@@ -1,10 +1,11 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import PropTypes from 'prop-types';
 
 const Togglable = forwardRef((props, refs) => {
   const [visible, setVisible] = useState(false);
 
-  const hideWhenVisible = { display: visible ? "none" : "" };
-  const showWhenVisible = { display: visible ? "" : "none" };
+  const hideWhenVisible = { display: visible ? 'none' : '' };
+  const showWhenVisible = { display: visible ? '' : 'none' };
 
   const toggleVisibility = () => {
     setVisible(!visible);
@@ -13,11 +14,9 @@ const Togglable = forwardRef((props, refs) => {
   // the useImperativeHandle function is a React hook, that is used for defining functions in a component,
   // which can be invoked from outside of the component
   // useImperativeHandle hook to make its toggleVisibility function available outside of the component
-  useImperativeHandle(refs, () => {
-    return {
-      toggleVisibility,
-    };
-  });
+  useImperativeHandle(refs, () => ({
+    toggleVisibility,
+  }));
 
   return (
     <div>
@@ -32,4 +31,10 @@ const Togglable = forwardRef((props, refs) => {
   );
 });
 
+Togglable.displayName = 'Togglable';
+
 export default Togglable;
+
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired,
+};
