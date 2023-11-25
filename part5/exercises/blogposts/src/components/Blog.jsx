@@ -1,6 +1,6 @@
 import Togglable from './Togglable'
 
-function Blog({ blog, onLike, onDelete }) {
+function Blog({ blog, onLike, showDelete, onDelete }) {
   return (
     <div style={blogStyle} className="blog">
       <div className="blogTitleAuthor">
@@ -17,7 +17,7 @@ function Blog({ blog, onLike, onDelete }) {
           <button className="likeButton" onClick={() => onLike({ ...blog, likes: blog.likes + 1 })}>like</button>
         </div>
         <div className="blogUserName">{blog.user.name}</div>
-        <button className="blogDeleteButton" onClick={() => onDelete(blog)}>delete</button>
+        {showDelete && <button className="blogDeleteButton" onClick={() => onDelete(blog)}>delete</button>}
       </Togglable>
     </div>
   )
