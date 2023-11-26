@@ -1,10 +1,23 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { createAnecdote } from '../requests'
+
 const AnecdoteForm = () => {
+
+  const queryClient = useQueryClient()
+  const newNoteMutation = useMutation({ 
+    mutationFn: createAnecdote, 
+    onSuccess: (newAnecdote) => {
+      const anecdotes = queryClient.getQueryData(['anecdotes'])
+      queryClient.setQueryData(['anecdotes'], anecdotes.concat(newAnecdote))
+    }}) 
 
   const onCreate = (event) => {
     event.preventDefault()
+    if (!event.target.anecdote.value.trim()) return
+    if (event.target.anecdote.value.length < 5) return alert('anecdote must be at least 5 characters long')
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    console.log('new anecdote')
+    newNoteMutation.mutate({ content, votes: 0 })
 }
 
   return (
