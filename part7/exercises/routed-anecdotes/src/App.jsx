@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link, useParams
+  Routes, Route, Link, useParams, useNavigate
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -63,6 +63,7 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
+  const navigate = useNavigate()
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
@@ -76,6 +77,10 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    setContent('')
+    setAuthor('')
+    setInfo('')
+    navigate('/')
   }
 
   return (
@@ -98,7 +103,25 @@ const CreateNew = (props) => {
       </form>
     </div>
   )
+}
 
+
+const Notification = ({notification, setNotification}) => {
+  useEffect(() => {
+    if (!notification) return;
+
+    setTimeout(() => {
+      setNotification('')
+    }, 5000)
+  }, [notification])
+
+  if (!notification) return null;
+
+  return (
+    <div>
+      {notification}
+    </div>
+  )
 }
 
 const App = () => {
@@ -124,6 +147,7 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`anecdote ${anecdote.content} successfully created!`)
   }
 
   const anecdoteById = (id) =>
@@ -138,6 +162,7 @@ const App = () => {
     }
 
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
+    setNotification(`anecdote ${anecdote.content} successfully voted!`)
   }
 
   return (
@@ -145,6 +170,7 @@ const App = () => {
       <div>
         <h1>Software anecdotes</h1>
         <Menu />
+        <Notification notification={notification} setNotification={setNotification} />
         <Routes>
           <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
           <Route path="/anecdotes" element={<AnecdoteList anecdotes={anecdotes} />} />
