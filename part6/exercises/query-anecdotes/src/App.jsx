@@ -47,6 +47,10 @@ const notificationReducer = (state='', action) => {
       return ''
     case 'ANECDOTE_CREATED':
       return 'Anecdote successfully created'
+    case 'ANECDOTE_CREATION_BLANK':
+      return 'Anecdote cannot be blank'
+    case 'ANECDOTE_CREATION_SHORT':
+      return 'Anecdote must be at least 5 characters long'
     case 'ANECDOTE_CREATION_ERROR':
       return 'Anecdote creation failed'
     case 'ANECDOTE_VOTED': 

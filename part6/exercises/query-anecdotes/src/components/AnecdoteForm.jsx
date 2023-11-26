@@ -16,8 +16,14 @@ const AnecdoteForm = () => {
 
   const onCreate = (event) => {
     event.preventDefault()
-    if (!event.target.anecdote.value.trim()) return
-    if (event.target.anecdote.value.length < 5) return alert('anecdote must be at least 5 characters long')
+    if (!event.target.anecdote.value.trim()) {
+      notificationDispatch({type: 'ANECDOTE_CREATION_BLANK'})
+      return
+    }
+    if (event.target.anecdote.value.length < 5) {
+      notificationDispatch({type: 'ANECDOTE_CREATION_SHORT'})
+      return
+    }
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
     newAnecdoteMutation.mutate({ content, votes: 0 })
