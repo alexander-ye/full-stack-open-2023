@@ -1,4 +1,4 @@
-import { parseArguments } from "./utils";
+import { isNotNumber, parseArguments } from "./utils";
 
 /**
  * 
@@ -22,9 +22,9 @@ const calculateBmi = (height: number, weight: number): string => {
 const printCalculateBmi = () => {
   const [height, weight] = parseArguments(process.argv, 2, (args: string[]) => {
     const height: number = Number(args[2]);
-    if (isNaN(height)) throw new Error('Provided height was not a number!');
+    if (isNotNumber(height)) throw new Error('Provided height was not a number!');
     const weight: number = Number(args[3]);
-    if (isNaN(weight)) throw new Error('Provided weight was not a number!');
+    if (isNotNumber(weight)) throw new Error('Provided weight was not a number!');
     return [height, weight];
   })
   console.log(calculateBmi(height, weight));

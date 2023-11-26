@@ -11,3 +11,6 @@ export const parseArguments = (
 
   return callbackFunction(args);
 }
+
+export const isNotNumber = (argument: any): boolean =>
+  isNaN(Number(argument));

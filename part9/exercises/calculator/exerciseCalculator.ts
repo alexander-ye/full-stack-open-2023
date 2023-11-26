@@ -1,4 +1,4 @@
-import { parseArguments } from "./utils";
+import { isNotNumber, parseArguments } from "./utils";
 
 interface Result {
   periodLength: number,
@@ -33,10 +33,10 @@ const printCalculateExercises = () : void => {
   try {
     const [hoursExercised, targetHours] = parseArguments(process.argv, 2, (args: string[]) => {
       const target: number = Number(args[2]);
-      if (isNaN(target)) throw new Error('Provided target was not a number!');
+      if (isNotNumber(target)) throw new Error('Provided target was not a number!');
       const dailyExerciseHours: number[] = args.slice(2).map(arg => {
         const hoursExercised = Number(arg)
-        if (isNaN(hoursExercised)) throw new Error('Provided hours exercised was not a number!');
+        if (isNotNumber(hoursExercised)) throw new Error('Provided hours exercised was not a number!');
         return hoursExercised;
       });
       return [dailyExerciseHours, target];
