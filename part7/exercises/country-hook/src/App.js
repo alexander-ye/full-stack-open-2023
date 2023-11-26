@@ -18,7 +18,22 @@ const useField = (type) => {
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
 
-  useEffect(() => {})
+  useEffect(() => {
+    if (!name.trim()) return
+    axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
+      .then(response => {
+        if (!response.data) {
+          setCountry({found: false})
+        } else {
+          setCountry({found: true, data: response.data})
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        setCountry({found: false})
+      
+      })
+  }, [name])
 
   return country
 }
@@ -36,12 +51,14 @@ const Country = ({ country }) => {
     )
   }
 
+  const name = country.data.name.common || country.data.name.official
+  const capital = country.data.capital?.length ? country.data.capital[0] : ''
   return (
     <div>
-      <h3>{country.data.name} </h3>
-      <div>capital {country.data.capital} </div>
+      <h3>{name} </h3>
+      <div>capital {capital} </div>
       <div>population {country.data.population}</div> 
-      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`}/>  
+      <img src={country.data.flag} height='100' alt={`flag of ${name}`}/>  
     </div>
   )
 }
@@ -60,7 +77,7 @@ const App = () => {
     <div>
       <form onSubmit={fetch}>
         <input {...nameInput} />
-        <button>find</button>
+        <button type="submit">find</button>
       </form>
 
       <Country country={country} />
