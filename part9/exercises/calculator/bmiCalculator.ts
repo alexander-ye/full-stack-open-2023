@@ -1,3 +1,5 @@
+import { parseArguments } from "./utils";
+
 /**
  * 
  * @param height // in centimeters
@@ -17,4 +19,17 @@ const calculateBmi = (height: number, weight: number): string => {
     return "Obese";
 }
 
-console.log(calculateBmi(180, 74))
+const printCalculateBmi = () => {
+  const [height, weight] = parseArguments(process.argv, 2, (args: string[]) => {
+    const height: number = Number(args[2]);
+    if (isNaN(height)) throw new Error('Provided height was not a number!');
+    const weight: number = Number(args[3]);
+    if (isNaN(weight)) throw new Error('Provided weight was not a number!');
+    return [height, weight];
+  })
+  console.log(calculateBmi(height, weight));
+}
+
+printCalculateBmi();
+
+// console.log(calculateBmi(180, 74))

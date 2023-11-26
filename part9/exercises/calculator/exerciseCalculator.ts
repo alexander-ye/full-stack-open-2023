@@ -1,3 +1,5 @@
+import { parseArguments } from "./utils";
+
 interface Result {
   periodLength: number,
   trainingDays: number,
@@ -27,4 +29,25 @@ const calculateExercises = (dailyExerciseHours: number[] = [], target: number) :
   };
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+const printCalculateExercises = () : void => {
+  try {
+    const [hoursExercised, targetHours] = parseArguments(process.argv, 2, (args: string[]) => {
+      const target: number = Number(args[2]);
+      if (isNaN(target)) throw new Error('Provided target was not a number!');
+      const dailyExerciseHours: number[] = args.slice(2).map(arg => {
+        const hoursExercised = Number(arg)
+        if (isNaN(hoursExercised)) throw new Error('Provided hours exercised was not a number!');
+        return hoursExercised;
+      });
+      return [dailyExerciseHours, target];
+    }
+    , -1);
+    console.log(calculateExercises(hoursExercised, targetHours));
+  } catch (e) {
+    console.log('Error, something bad happened, message: ', e.message);
+  }
+}
+
+printCalculateExercises()
+
+// console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
