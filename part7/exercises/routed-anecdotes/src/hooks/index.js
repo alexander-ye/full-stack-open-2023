@@ -11,12 +11,17 @@ export const useField = (type) => {
   return {
     type,
     value,
-    onChange
+    onChange,
   }
 }
 
-// modules can have several named exports
 
-export const useAnotherHook = () => {
-  // ...
-}
+// Building your own Hooks lets you extract component logic into reusable functions.
+// RULES FOR HOOKS
+
+// Don’t call Hooks inside loops, conditions, or nested functions. 
+// Instead, always use Hooks at the top level of your React function.
+
+// Don’t call Hooks from regular JavaScript functions. Instead, you can:
+// Call Hooks from React function components.
+// Call Hooks from custom Hooks
